@@ -13,9 +13,10 @@
 #
 import sys
 fh = open("input-data.txt", "r+")
+
 map = {}
 table = []
-i=0
+#append data to a 2D array table
 for line in fh:
     line = line.replace(" ", "").rstrip('\n').split(",")
     temp = line[0]
@@ -23,13 +24,14 @@ for line in fh:
     del line[-1]
     line.append(temp) 
     table.append(line) 
-    i+=1
 
+#mapping attributes to number
 c = 0
 for col in range(len(table[0])):
     r = 0
     value = 0
     for row in range(len(table)):
+        key = table[r][c] 
         if key == "?":
             map[key] = 0
         if key.isdigit():
