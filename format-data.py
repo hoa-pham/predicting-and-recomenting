@@ -20,7 +20,6 @@ map = {}
 table = []
 
 #appending data to a 2D array table
-i = 0
 for line in fh:
     line = line.replace(" ", "").rstrip('\n').split(",")
     temp = line[0]
@@ -28,17 +27,24 @@ for line in fh:
     del line[-1]
     line.append(temp) 
     table.append(line) 
-    #if i == 10:
-    #    break
-    i+=1
+
+#average the attribute
 
 def ave(table, i):
     r = 0
     sum = 0
-    for r in table:
+    for row in table:
+        if table[r][i] == '?':
+            r+=1
+            continue 
         sum+=table[r][i]
         r+=1
-    return sum/len(table[0])
+    r = 0
+    average = sum/len(table)
+    for row in table:
+        if table[r][i] =='?':
+            table[r][i] = average
+        r+=1
 
 #mapping attributes to number
 c = 0
@@ -60,16 +66,34 @@ for col in range(len(table[0])):
     c+=1
 
 #switching data to svm array
-
-for i, row in enumerate(table):
-    for j, col in enumerate(table[i]):
+i = 0
+for row in table:
+    j = 0
+    for col in table[i]:
         if col == "?":
+	    j+=1
             continue
         if not col.isdigit():
             table[i][j] = map[col]
         else:
             table[i][j] = int(col)
-    print row
-
+        j+=1
+    i+=1
+ 
+#filling "?" with attribute average value
+for row in table:
+    i = 0
+    for col in row:
+	if col == '?':
+	    ave(table, i)
+	    break
+	i+=1
+	
+#writting svm to a file
+for row in table:
+    for data in row:
+	f.write(' %s'%(data)),
+    f.writelines('\n')
+f.close()
 
 
