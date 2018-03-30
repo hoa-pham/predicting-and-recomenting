@@ -1,25 +1,22 @@
-#import urllib
-#from bs4 import BeautifulSoup
-#file = open("input-data.txt", "w+")
-#
-#page = urllib.urlopen('https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data')
-#
-#soup = BeautifulSoup(page,"lxml")
-#text = soup.get_text()
-#
-#for line in text:
-#    file.write(line)
-#file.close()
-#
-import sys
+import urllib
+from bs4 import BeautifulSoup
+file = open("input-data.txt", "w+")
+page = urllib.urlopen('https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data')
+soup = BeautifulSoup(page,"lxml")
+text = soup.get_text()
+
+for line in text:
+    file.write(line)
+file.close()
+
 fh = open("input-data.txt", "r+")
 f = open("formatted-data.txt", "w+")
-
 
 map = {}
 table = []
 
 #appending data to a 2D array table
+i=0
 for line in fh:
     line = line.replace(" ", "").rstrip('\n').split(",")
     temp = line[0]
@@ -27,9 +24,10 @@ for line in fh:
     del line[-1]
     line.append(temp) 
     table.append(line) 
+    i+=1
+del table[-1]
 
 #average the attribute
-
 def ave(table, i):
     r = 0
     sum = 0
@@ -91,8 +89,13 @@ for row in table:
 	
 #writting svm to a file
 for row in table:
+    i=0
     for data in row:
-	f.write(' %s'%(data)),
+	if i>0:
+	    f.write('%d:%s '%(i, data)),
+	else:
+	    f.write('%s '%data),
+	i+=1
     f.writelines('\n')
 f.close()
 
