@@ -13,7 +13,7 @@ def reprocessed_data (lines_file):
 	 	last_item = len(line) - 1
 	 	line[-1] = line[-1].strip()
 	 	if ">50K" == line[last_item]:
-	 		arr = [1,3,5,6,7]
+	 		arr = [1,3,5,6,7,12]
 	 		items = [line[i] for i in arr]
 	 		data_processed_arr.append(items)
 	return data_processed_arr
@@ -28,7 +28,8 @@ def frequent_items (transactions, min_support_percentage):
                 frequent_items_dict[line] = 1
             else:
                 frequent_items_dict[line] += 1
-    print(frequent_items_dict)
+    
+    return frequent_items_dict
     
 	# Calculate the threshold. 
 	#min_support_count = (min_support_percentage / 100)* number_data_records
@@ -46,20 +47,36 @@ def frequent_items (transactions, min_support_percentage):
     
 	# Adding it to the FP Growth
 
+def percentage_greater_than_40_hours (transactions):
+    count = 0
+    for transaction in transactions:
+        hours = int(transaction[5])
+        if hours >= 40:
+            count += 1
+    return count/len(transactions)
+    
 
-data_processed_arr = reprocessed_data(lines_file)
+
+
+data_processed_arr = reprocessed_data(lines_file)   
+number = percentage_greater_than_40_hours(data_processed_arr)
+print (number)
 frequent_items(data_processed_arr, 30)
 
 
 from apyori import apriori
 
-rules = apriori(transactions, min_support = 0.06, min_confidence = 0.85, min_lift = 500, max_length = None)
+rules = apriori(data_processed_arr, min_support = 0.06, min_confidence = 0.75, min_lift = 300, max_length = None)
 results = list(rules)
 
 results_list = []
 for i in range(0, len(results)):
     results_list.append('RULE:\t' + str(results[i][0]) + '\nSUPPORT:\t' + str(results[i][1]) + '\nStatistic:\t' + str(results[i][2]))
     
+
+
+
+
 
 
 
