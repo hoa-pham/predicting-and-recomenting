@@ -31,7 +31,8 @@ for row in table:
 
 #writting svm to a file
 for line in table:
-    f.write("%s\n"%line)
+    str = ' '.join(line)
+    f.write("%s\n"%str)
 sys.exit()
 
 
