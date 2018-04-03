@@ -8,7 +8,7 @@ text = soup.get_text()
 for line in text:
     file.write(line)
 file.close()
-
+import sys
 fh = open("input-data.txt", "r+")
 f = open("formatted-data.txt", "w+")
 
@@ -16,93 +16,22 @@ map = {}
 table = []
 
 #appending data to a 2D array table
-i=0
 for line in fh:
     line = line.replace(" ", "").rstrip('\n').split(",")
-    temp = line[0]
-    line[0] = line[-1] 
-    del line[-1]
-    line.append(temp) 
     table.append(line) 
-    i+=1
 del table[-1]
 
-#average the attribute
-def ave(table, i):
-    r = 0
-    sum = 0
-    for row in table:
-        if table[r][i] == '?':
-            r+=1
-            continue 
-        sum+=table[r][i]
-        r+=1
-    r = 0
-    average = sum/len(table)
-    for row in table:
-        if table[r][i] =='?':
-            table[r][i] = average
-        r+=1
-
-#mapping attributes to number
-c = 0
-for col in range(len(table[0])):
-    r = 0
-    value = 0
-    for row in range(len(table)):
-        key = table[r][c] 
-        if key.isdigit():
-            break
-        if key == "?":
-            map[key] = 0 
-        if map.has_key(key):
-            r+=1
-            continue
-        map[table[r][c]] = value
-        value+=1
-        r+=1
-    c+=1
-
-#switching data to svm array
-i = 0
+i=0
 for row in table:
-    j = 0
-    for col in table[i]:
-        if col == "?":
-	    j+=1
-            continue
-        if not col.isdigit():
-            table[i][j] = map[col]
-        else:
-            if j==12:
-                if col>=40:
-                    table[i][j]=1
-                else:
-                    table[i][j]=0
-            else:
-                table[i][j] = int(col)
-        j+=1
+    if table[i][12] >= 40:
+        table[i][12] = '$$'
+    else:
+        table[i][12] = '$'
     i+=1
- 
-#filling "?" with attribute average value
-for row in table:
-    i = 0
-    for col in row:
-	if col == '?':
-	    ave(table, i)
-	    break
-	i+=1
-	
+
 #writting svm to a file
-for row in table:
-    i=0
-    for data in row:
-	if i>0:
-	    f.write('%d:%s '%(i, data)),
-	else:
-	    f.write('%s '%data),
-	i+=1
-    f.writelines('\n')
-f.close()
+for line in table:
+    f.write("%s\n"%line)
+sys.exit()
 
 
