@@ -6,6 +6,7 @@ import pandas as pd
 from sklearn import preprocessing
 
 dataset = pd.read_csv("numpy_formatted.txt")
+original_data = dataset.copy()
 def format_data_encoding(data_set):
     # We need to convert all the value of the data in the value of 0 to 1 
     for column in data_set.columns:
@@ -13,8 +14,9 @@ def format_data_encoding(data_set):
         data_set[column] = le.fit_transform(data_set[column])
     return data_set
 
-encoded_data_set = format_data_encoding(dataset)
 
+encoded_data_set = format_data_encoding(dataset)
+"""
 X = encoded_data_set.iloc[:, [0,1,4,5,6,7,8,12,2,3,10,11]].values
 y = encoded_data_set.iloc[:,14].values
 from sklearn.model_selection import train_test_split
@@ -26,6 +28,7 @@ from sklearn.preprocessing import StandardScaler
 sc_X = StandardScaler()
 X_train = sc_X.fit_transform(X_train)
 X_test = sc_X.transform(X_test)
+"""
 """
 from sklearn.linear_model import LogisticRegression 
 classifier = LogisticRegression(random_state = 0)
@@ -72,53 +75,84 @@ features = encoded_data_set.drop("income",axis = 1)
 target = encoded_data_set.income
 names  = encoded_data_set.columns.values.tolist();
 #rank all features, i.e continue the elimination until the last one
-rfe = RFE(lr, n_features_to_select=3)
+rfe = RFE(lr, n_features_to_select=1)
 rfe.fit(features,target)
 print ("Features sorted by their rank:")
 print (sorted(zip(map(lambda x: round(x, 4), rfe.ranking_), names)))
 
 
 
-
-from sklearn import metrics
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
 logreg = LogisticRegression()
+
+X_train, X_test, y_train, y_test = train_test_split(features,target,test_size = 0.33, random_state = 1242)
+
 logreg.fit(X_train, y_train)
 y_pred = logreg.predict(X_test)
-print('Accuracy of logistic regression classifier on test set: {:.2f}'.format(logreg.score(X_test, y_test)))
-"""
+
+
+
+from sklearn.metrics import accuracy_score
+print ("Accuarcy Score for logistic regression ")
+print(accuracy_score(y_test, y_pred))
+
+
+from sklearn.metrics import classification_report
+print ("Classification Report ")
+print(classification_report(y_test, y_pred))
+
+
 from sklearn import model_selection
 from sklearn.model_selection import cross_val_score
 kfold = model_selection.KFold(n_splits=9, random_state=7)
-modelCV = LogisticRegression()
-scoring = 'accuracy'
-results = model_selection.cross_val_score(modelCV, X_train, y_train, cv=kfold, scoring=scoring)
-print("10-fold cross validation average accuracy: %.3f" % (results.mean()))
-"""
-from sklearn.ensemble import ExtraTreesClassifier
+scores = cross_val_score(LogisticRegression(), X_train, y_train, cv=9, scoring='accuracy')
+print("9-fold cross validation average accuracy: %.5f" % (scores.mean()))
 
-model = ExtraTreesClassifier()
-model.fit(features,target)
 
-#display the feature importance  
+
+
+# Use KNN to predict the model 
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn import metrics
+
+
+features = encoded_data_set[["educationnum","maritalstatus","relationship","race", "sex"]]
+
+XKnn_train, XKnn_test, yKnn_train, yKnn_test = train_test_split(features,target,test_size = 0.33, random_state = 1242)
+
+algorithms = ["auto", "ball_tree", "kd_tree", "brute"]
+for algorithm in algorithms:    
+    knn = KNeighborsClassifier(n_neighbors = 5, algorithm=algorithm)
+    knn.fit(XKnn_train, yKnn_train)
+    knn_pred = knn.predict(XKnn_test)
+    final_score = metrics.accuracy_score(yKnn_test, knn_pred)
+    print ("Accuarcy for (%s) Algorithm is: %.5f " %(algorithm,final_score) )
+
+
+    # This will print out the nomial attribute
+    #print((original_data["workclass"].value_counts() / original_data.shape[0]).head())
+
+   
+# Perform the GBM algorithm model 
+
+
+
+
+
+from xgboost import XGBClassifier
+from xgboost import plot_importance
+
+X = encoded_data_set.drop(["income","capitalgain","capitalloss","fnlwgt","education"],axis=1)
+y = encoded_data_set["income"]
+model = XGBClassifier()
+model.fit(X, y)
 print(model.feature_importances_)
-print('\n',features.columns.values)
+plot_importance(model)
+plt.show()
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=7)
 
-#bar plot of feature importance
-values = model.feature_importances_
-pos = np.arange(14) + 0.02
-plt.barh(pos,values,align = 'center')
-plt.title('Feature importance plot')
-plt.xlabel('feature importance ')
-plt.ylabel('features')
-plt.yticks(np.arange(14),('age', 'workclass', 'fnlwgt', 'education', 'education.num', 'marital.status','occupation' ,'relationship', 'race' ,'sex', 'capital-gain', 'capital.loss','hours.per.week', 'native.country'))
-plt.grid(True)
-
-
-
-
-
-
-
-
-
+xg_pred = model.predict(X_test)
+accuracy = metrics.accuracy_score(y_test, xg_pred)
+print("Accuracy for XG BOOSTING : %.3f%%" % (accuracy * 100.0))
 

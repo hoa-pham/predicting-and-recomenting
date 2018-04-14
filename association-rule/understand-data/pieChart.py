@@ -146,7 +146,7 @@ plt.figure(figsize=(25,34))
 
 
 ax13 = plt.subplot(gs[6,1])
-sns.countplot(y=data_set['nativecountry'], hue=data_set['income'], ax=ax13, palette=['red', 
+sns.countplot(y=data_set['nativecountry'], hue=data_set ['income'], ax=ax13, palette=['red', 
                                                                             'green'])
 ax13.spines['top'].set_visible(False)
 ax13.spines['right'].set_visible(False)
