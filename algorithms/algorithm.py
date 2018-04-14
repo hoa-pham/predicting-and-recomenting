@@ -134,12 +134,8 @@ for algorithm in algorithms:
     #print((original_data["workclass"].value_counts() / original_data.shape[0]).head())
 
    
-# Perform the GBM algorithm model 
-
-
-
-
-
+    
+#Boosting Algorithm
 from xgboost import XGBClassifier
 from xgboost import plot_importance
 
@@ -155,4 +151,57 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random
 xg_pred = model.predict(X_test)
 accuracy = metrics.accuracy_score(y_test, xg_pred)
 print("Accuracy for XG BOOSTING : %.3f%%" % (accuracy * 100.0))
+
+
+
+
+
+
+
+
+
+
+# Random forest. Set of sub Decision Tree
+from sklearn.ensemble import RandomForestClassifier
+X = encoded_data_set.drop("income", axis=1)
+
+number_of_trees = [1,10,100]
+
+
+for tree in number_of_trees:
+    
+    rf = RandomForestClassifier(n_estimators=tree, oob_score=True, random_state=123456)
+    rf.fit(X_train, y_train)
+    random_pred = rf.predict(X_test)
+    accuracy = accuracy_score(y_test, random_pred)
+    print('Random Forest estimate for %d sub tree is %.3f%%: ' %(tree, accuracy * 100.0))
+
+
+# Extra Tree not powefull than RF
+
+from sklearn.ensemble import ExtraTreesClassifier
+extraTree = ExtraTreesClassifier(n_estimators=100, oob_score=True, random_state=123456,max_depth=10,bootstrap=True)
+extraTree.fit(X_train, y_train)
+pred = extraTree.predict(X_test)
+accuracy = accuracy_score(y_test, pred)
+ 
+print ("Extra Tree Classifier accuracy is %.3f%%" %(accuracy*100.0))
+
+
+
+
+# Backpropagation 
+
+
+
+from sklearn.neural_network import MLPClassifier
+ann = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(10, 2), random_state=12345)
+ann.fit(X_train, y_train)
+pred = extraTree.predict(X_test)
+accuracy = accuracy_score(y_test, pred)
+
+print ("Neural Network Classifier accuracy is %.3f%%" %(accuracy*100.0))
+
+
+
 
