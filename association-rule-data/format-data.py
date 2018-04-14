@@ -23,10 +23,12 @@ del table[-1]
 
 i=0
 for row in table:
-    if table[i][12] >= 40:
-        table[i][12] = '$$'
-    else:
+    if int(table[i][12])<=20:
         table[i][12] = '$'
+    elif int(table[i][12])>20 and int(table[i][12])<=40:
+        table[i][12] = '$$'
+    else: 
+        table[i][12] = '$$$'
     i+=1
 
 #writting svm to a file
