@@ -26,7 +26,7 @@ for row in table:
 #hours per week
     if int(table[i][12])<=20:
         table[i][12] = 'h1'
-    elif int(table[i][12])>20 and int(table[i][12])>=40:
+    elif int(table[i][12])>20 and int(table[i][12])<=40:
         table[i][12] = 'h2'
     else: 
         table[i][12] = 'h3'
@@ -44,10 +44,8 @@ for row in table:
 #education-num
     if int(table[i][4])<=12:
         table[i][4] = 'edu1'
-    elif int(table[i][4])>12 and int(table[i][4])<=14:
-        table[i][4] = 'edu2'
     else: 
-        table[i][4] = 'edu3'
+        table[i][4] = 'edu2'
 
     i+=1
 
