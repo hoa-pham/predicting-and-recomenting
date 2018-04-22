@@ -26,6 +26,8 @@ dict_sex_status = {} #9
 
 dict_education_status = {} #3
 
+dict_country_status = {}
+
 list_age = [] #0
 
 list_number_education = [] #4
@@ -36,6 +38,8 @@ list_capital_gain = []
 
 list_capital_loss = []
 
+list_country = []
+
 i = 0 
 for data in dataset:
     if i >= 1:
@@ -45,6 +49,11 @@ for data in dataset:
         list_number_hours.append(data[12])
         list_capital_gain.append(data[10])
         list_capital_loss.append(data[11])
+        if data[13] not in dict_country_status:
+            dict_country_status[data[13]] = 1
+        else:
+            dict_country_status[data[13]] += 1
+        
         if data[3] not in dict_education_status:
             dict_education_status[data[3]] = 1
         else:
@@ -94,6 +103,7 @@ chart_pie(dict_relationship_status, "Chart Relationship")
 chart_pie(dict_occupation_status, "Chart Occupation")
 chart_pie(dict_martial_status, "Chart Martial")
 """
+chart_pie(dict_country_status, "Country")
 
 
 def chart_barh (dic, message):
