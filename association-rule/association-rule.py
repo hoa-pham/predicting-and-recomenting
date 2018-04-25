@@ -8,11 +8,11 @@ def reprocessed_data (lines_file):
 			#3: Degree
 			# 5: Martial-Status
 			#6: Occupation 
-			#7 : Relationship
+			#7 : Relationshu1
             #8: Race
 	 	line = line.split(" ")
 	 	last_item = len(line) - 1
-	 	line[-1] = line[-1].strip()
+	 	line[-1] = line[-1].stru1()
 	 	if ">50K" == line[last_item]:
 	 		arr = [0,1,4,5,6,7,8,9,12,13]
 	 		items = [line[i] for i in arr]
@@ -78,162 +78,77 @@ for i in range(0, len(results)):
     array.append(list(results[i][0]))
 for i in range(0, len(array)):
     if len(array[i])>=6:
-        for j in range(0, len(array[i])):
-            if array[i][j] == 'h2' or array[i][j] == 'e2':
-                array_2.append(array[i])
+        array_2.append(array[i])
         
       
-iput = ["White","Male","a1","h1"]    
+u1 = ["Male","a1","h1","edu1", "United-States", "Sales", "Never-married"]    
+
 map = {}
-def find_best(array_2, iput):
+def find_best(array_2, u1):
     m = 0
     for i in range(0, len(array_2)):
         count=0
         for j in range(0, len(array_2[i])):
             map[array_2[i][j]] = 1
-        for k in range(0, len(iput)):
-            if (iput[k]) in map:
+        for k in range(0, len(u1ut)):
+            if (u1ut[k]) in map:
                 count+=1
         if count > m:
             m = count
             temp = i
-        
         map.clear()
-    print ("our recomendation: ", array_2[temp])
+    print (array_2[temp])
 
-
-
-find_best(array_2, iput)
-"""
-age: continuous. 
-workclass: Private, Self-emp-not-inc, Self-emp-inc, Federal-gov, Local-gov, State-gov, Without-pay, Never-worked. 
-fnlwgt: continuous. 
-education: Bachelors, Some-college, 11th, HS-grad, Prof-school, Assoc-acdm, Assoc-voc, 9th, 7th-8th, 12th, Masters, 1st-4th, 10th, Doctorate, 5th-6th, Preschool. 
-education-num: continuous. 
-marital-status: Married-civ-spouse, Divorced, Never-married, Separated, Widowed, Married-spouse-absent, Married-AF-spouse. 
-occupation: Tech-support, Craft-repair, Other-service, Sales, Exec-managerial, Prof-specialty, Handlers-cleaners, Machine-op-inspct, Adm-clerical, Farming-fishing, Transport-moving, Priv-house-serv, Protective-serv, Armed-Forces. 
-relationship: Wife, Own-child, Husband, Not-in-family, Other-relative, Unmarried. 
-race: White, Asian-Pac-Islander, Amer-Indian-Eskimo, Other, Black. 
-sex: Female, Male. 
-capital-gain: continuous. 
-capital-loss: continuous. 
-hours-per-week: continuous. 
-native-country: United-States, Cambodia, England, Puerto-Rico, Canada, Germany, Outlying-US(Guam-USVI-etc), India, Japan, Greece, South, China, Cuba, Iran, Honduras, Philippines, Italy, Poland, Jamaica, Vietnam, Mexico, Portugal, Ireland, France, Dominican-Republic, Laos, Ecuador, Taiwan, Haiti, Columbia, Hungary, Guatemala, Nicaragua, Scotland, Thailand, Yugoslavia, El-Salvador, Trinadad&Tobago, Peru, Hong, Holand-Netherlands.
-"""
-ip = []
-def ini():
-    age = input("a1 or a2 or a3: ")
-    ip.append(age)
-    workclass = input("workclass: ")
-    ip.append(workclass)
-    education = input("education: ")
-    ip.append(education)
-    educationnum = input("e1 or e2: ")
-    ip.append(educationnum)
-    marital = input("marital-status: ")
-    ip.append(marital)
-    occupation = input("occupation: ")
-    ip.append(occupation)
-    rela = input("relationship: ")
-    ip.append(rela)
-    race = input("race: ")
-    ip.append(race)
-    sex = input("sex: ")
-    ip.append(sex)
-    hpw = input("hours per week: ")
-    ip.append(hpw)
-    ncountry = input("native-country: ")
-    ip.append(ncountry)
-    return ip
-    
-#ini()
-
-"""
-from sklearn import preprocessing
-import pandas as pd 
-from xgboost import XGBClassifier
-from sklearn import metrics
-
-def format_data_encoding(data_set):
-    # We need to convert all the value of the data in the value of 0 to 1 
-    for column in data_set.columns:
-        le = preprocessing.LabelEncoder()
-        data_set[column] = le.fit_transform(data_set[column])
-    return data_set
-
-dataset = pd.read_csv("../numpy_formatted.txt")
-
-#accuracy = metrics.accuracy_score(y_test, xg_pred)
-"""
-
-"""
-import sys
+edu_array=[]
+hour_array=[]
 map = {}
-def find_best_rule(input_list):
-    max = 0
-    for i in range(0, len(array_2)):
-        count=0
-        for j in range(0, len(array_2[i])): 
-            map[array_2[i][j]]=1
-        for k in range(0, len(input_list)):
-            if input_list[k] in map:
-                count+=1
-        map.clear()
-        if count>=max:
-            max = count
-            tem = i
-            print (tem)
-    print (array_2[-1])
 
-l = ["Wife"]
-find_best_rule(l)
-"""
+for x in array_2:
+    for y in x:
+        map[y]=None
+        if y=='edu1' or y=='edu2':
+            edu_array.append(x)
+        if y=='h1' or y=='h2' or y=='h3':
+            hour_array.append(x)
+def filter(arr, inp):
+    for x in inp:
+        if x=='edu1':
+            for y in edu_array:
+                for z in y:
+                    if z=='edu2':
+                        print y
+        if x=='h1':
+            for y in hour_array:
+                for z in y:
+                    if z=='h2' or z=='h3':
+                        print y
 
-"""
-
-
-
-inp = ["Female"]
-
-
-print (points_similar(array_2[-1], inp) )
-
-"""
-
-"""
-def points_similar(rule, inp):
-    max_length_inp = len(inp)
-    count = 0
-    for i in range(0,max_length_inp):
-        if inp[i] in rule:
-            count += 1
-    return count
-
-
-def find_best_rule (rules, inp):
-    max_count = 0 
-    for i in range(0, len(rules)):
-        current_count = points_similar(rules[i],inp)
-        if current_count > max_count:
-            max_count = current_count
+def ini():
+    print ("Our user input example: Male,a1,h1,edu1, United-States, Sales, Never-married")
+    print ("The first attemp: ", find_best(array_2,u1))
+    print ("The seconde attemp: ", flter(array_2,u1)) 
+#    age = input("a1 or a2 or a3: ")
+#    u1.append(age)
+#    workclass = input("workclass: ")
+#    u1.append(workclass)
+#    education = input("education: ")
+#    u1.append(education)
+#    educationnum = input("e1 or e2: ")
+#    u1.append(educationnum)
+#    marital = input("marital-status: ")
+#    u1.append(marital)
+#    occupation = input("occupation: ")
+#    u1.append(occupation)
+#    rela = input("relationshu1: ")
+#    u1.append(rela)
+#    race = input("race: ")
+#    u1.append(race)
+#    sex = input("sex: ")
+#    u1.append(sex)
+#    hpw = input("hours per week: ")
+#    u1.append(hpw)
+#    ncountry = input("native-country: ")
+#    u1.append(ncountry)
+#    return u1
     
-    rules_arr = []
-    for i in range (0, len(rules)):
-        if max_count == points_similar(rules[i], inp):
-            rules_arr.append(rules[i])
-    print (rules_arr)
 
-
-inp = ["Female"]
-
-find_best_rule (array_2, inp)
-
-"""
-
-
-"""
-import pyfpgrowth
-data_processed_arr = reprocessed_data(lines_file)
-patterns = pyfpgrowth.find_frequent_patterns(transactions, 3)
-fp_rules = pyfpgrowth.generate_association_rules(patterns, 0.75)
-"""
