@@ -46,16 +46,6 @@ def frequent_items (transactions, min_support_percentage):
 		#transaction = sorted(transaction, key=lambda x : frequent_items_dict[x], reverse=True)
 		#print (transaction)
     
-	# Adding it to the FP Growth
-
-def percentage_greater_than_40_hours (transactions):
-    count = 0
-    for transaction in transactions:
-        hours = int(transaction[5])
-        if hours >= 40:
-            count += 1
-    return count/len(transactions)
-    
 
 
 
@@ -78,13 +68,12 @@ for i in range(0, len(results)):
     array.append(list(results[i][0]))
 for i in range(0, len(array)):
     if len(array[i])>=6:
-        for j in range(0, len(array[i])):
-            if array[i][j] == 'h2' or array[i][j] == 'e2':
-                array_2.append(array[i])
+        if "White" not in array[i]:
+            array_2.append(array[i])
         
-      
-iput = ["White","Male","a1","h1"]    
+iput = ["Black","Male","a1","h1","u2", "United-States"]    
 map = {}
+index =0 
 def find_best(array_2, iput):
     m = 0
     for i in range(0, len(array_2)):
@@ -99,11 +88,12 @@ def find_best(array_2, iput):
             temp = i
         
         map.clear()
+    index = temp  
     print ("our recomendation: ", array_2[temp])
 
 
 
-find_best(array_2, iput)
+#find_best(array_2, iput)
 """
 age: continuous. 
 workclass: Private, Self-emp-not-inc, Self-emp-inc, Federal-gov, Local-gov, State-gov, Without-pay, Never-worked. 
@@ -200,7 +190,6 @@ print (points_similar(array_2[-1], inp) )
 
 """
 
-"""
 def points_similar(rule, inp):
     max_length_inp = len(inp)
     count = 0
@@ -218,22 +207,14 @@ def find_best_rule (rules, inp):
             max_count = current_count
     
     rules_arr = []
+   
     for i in range (0, len(rules)):
-        if max_count == points_similar(rules[i], inp):
+        if max_count >= points_similar(rules[i], inp):
             rules_arr.append(rules[i])
     print (rules_arr)
+    return rules_arr
 
+inp = ["Male","a1","h1","edu1", "United-States", "Sales", "Never-married"]    
 
-inp = ["Female"]
+count = find_best_rule (array_2, inp)
 
-find_best_rule (array_2, inp)
-
-"""
-
-
-"""
-import pyfpgrowth
-data_processed_arr = reprocessed_data(lines_file)
-patterns = pyfpgrowth.find_frequent_patterns(transactions, 3)
-fp_rules = pyfpgrowth.generate_association_rules(patterns, 0.75)
-"""
