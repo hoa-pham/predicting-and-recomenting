@@ -1,4 +1,13 @@
 lines_file = open("../good-data/good-data.txt", "r")
+
+
+"""
+
+This Function will preprocess data by the variables selection and 
+return it as an array 
+
+
+"""
 data_processed_arr = []
 def reprocessed_data (lines_file):
 	 
@@ -20,41 +29,14 @@ def reprocessed_data (lines_file):
 	return data_processed_arr
 
 
-def frequent_items (transactions, min_support_percentage):
-    frequent_items_dict = {} 
-    for transaction in transactions:
-		#Count every duplicate items and store in dict
-        for line in transaction:
-            if line not in frequent_items_dict:
-                frequent_items_dict[line] = 1
-            else:
-                frequent_items_dict[line] += 1
-    
-    return frequent_items_dict
-    
-	# Calculate the threshold. 
-	#min_support_count = (min_support_percentage / 100)* number_data_records
-	#print ("Total records is " + str(number_data_records))
-	#print ("The support count is " + str(min_support_count))
-	#frequent_items_dict = dict ((key,value) for key, value in frequent_items_dict.items() if value >= min_support_count)
-	#for line in frequent_items_dict:
-		#print (line , frequent_items_dict[line])
-	#Next step, we need to remove all infrequent items in the each transcation 
-	#print ("This is debug mode to check whether the infrequent is removed. and sorted")
-	#for transaction in transactions:
-		#transaction = list(filter(lambda x: x in frequent_items_dict, transaction))
-		#transaction = sorted(transaction, key=lambda x : frequent_items_dict[x], reverse=True)
-		#print (transaction)
-    
-
 
 
 data_processed_arr = reprocessed_data(lines_file)   
-#number = percentage_greater_than_40_hours(data_processed_arr)
-#print (number)
-#frequent_items(data_processed_arr, 30)
 
-
+"""
+This function will call in order to run Association Rules
+The rules will be then under the results array
+"""
 from apyori import apriori
 
 rules = apriori(data_processed_arr, min_support = 0.02, min_confidence = 0.95, min_lift = 300, min_length =3, max_length = None)
@@ -63,6 +45,8 @@ results = list(rules)
 array = []
 array_2 = []
 results_list = []
+
+
 for i in range(0, len(results)):
     results_list.append('RULE:\t' + str(results[i][0]) + '\nSUPPORT:\t' + str(results[i][1]) + '\nStatistic:\t' + str(results[i][2]))
     array.append(list(results[i][0]))
@@ -95,20 +79,7 @@ def find_best(array_2, iput):
 
 #find_best(array_2, iput)
 """
-age: continuous. 
-workclass: Private, Self-emp-not-inc, Self-emp-inc, Federal-gov, Local-gov, State-gov, Without-pay, Never-worked. 
-fnlwgt: continuous. 
-education: Bachelors, Some-college, 11th, HS-grad, Prof-school, Assoc-acdm, Assoc-voc, 9th, 7th-8th, 12th, Masters, 1st-4th, 10th, Doctorate, 5th-6th, Preschool. 
-education-num: continuous. 
-marital-status: Married-civ-spouse, Divorced, Never-married, Separated, Widowed, Married-spouse-absent, Married-AF-spouse. 
-occupation: Tech-support, Craft-repair, Other-service, Sales, Exec-managerial, Prof-specialty, Handlers-cleaners, Machine-op-inspct, Adm-clerical, Farming-fishing, Transport-moving, Priv-house-serv, Protective-serv, Armed-Forces. 
-relationship: Wife, Own-child, Husband, Not-in-family, Other-relative, Unmarried. 
-race: White, Asian-Pac-Islander, Amer-Indian-Eskimo, Other, Black. 
-sex: Female, Male. 
-capital-gain: continuous. 
-capital-loss: continuous. 
-hours-per-week: continuous. 
-native-country: United-States, Cambodia, England, Puerto-Rico, Canada, Germany, Outlying-US(Guam-USVI-etc), India, Japan, Greece, South, China, Cuba, Iran, Honduras, Philippines, Italy, Poland, Jamaica, Vietnam, Mexico, Portugal, Ireland, France, Dominican-Republic, Laos, Ecuador, Taiwan, Haiti, Columbia, Hungary, Guatemala, Nicaragua, Scotland, Thailand, Yugoslavia, El-Salvador, Trinadad&Tobago, Peru, Hong, Holand-Netherlands.
+geting user input
 """
 ip = []
 def ini():
@@ -136,60 +107,10 @@ def ini():
     ip.append(ncountry)
     return ip
     
-#ini()
-
-"""
-from sklearn import preprocessing
-import pandas as pd 
-from xgboost import XGBClassifier
-from sklearn import metrics
-
-def format_data_encoding(data_set):
-    # We need to convert all the value of the data in the value of 0 to 1 
-    for column in data_set.columns:
-        le = preprocessing.LabelEncoder()
-        data_set[column] = le.fit_transform(data_set[column])
-    return data_set
-
-dataset = pd.read_csv("../numpy_formatted.txt")
-
-#accuracy = metrics.accuracy_score(y_test, xg_pred)
-"""
-
-"""
-import sys
-map = {}
-def find_best_rule(input_list):
-    max = 0
-    for i in range(0, len(array_2)):
-        count=0
-        for j in range(0, len(array_2[i])): 
-            map[array_2[i][j]]=1
-        for k in range(0, len(input_list)):
-            if input_list[k] in map:
-                count+=1
-        map.clear()
-        if count>=max:
-            max = count
-            tem = i
-            print (tem)
-    print (array_2[-1])
-
-l = ["Wife"]
-find_best_rule(l)
-"""
-
-"""
-
-
-
-inp = ["Female"]
-
-
-print (points_similar(array_2[-1], inp) )
-
-"""
-
+#first attempt
+    """
+    This is our first attempt 
+    """
 def points_similar(rule, inp):
     max_length_inp = len(inp)
     count = 0
@@ -218,3 +139,34 @@ inp = ["Male","a1","h1","edu1", "United-States", "Sales", "Never-married"]
 
 count = find_best_rule (array_2, inp)
 
+#second attempt
+""" 
+This is our second attempt
+
+"""
+edu_array=[]
+hour_array=[]
+map = {}
+
+for x in array_2:
+    for y in x:
+        map[y]=None
+        if y=='edu1' or y=='edu2':
+            edu_array.append(x)
+        if y=='h1' or y=='h2' or y=='h3':
+            hour_array.append(x)
+def filter(arr, inp):
+    for x in inp:
+        if x=='edu1':
+            for y in edu_array:
+                for z in y:
+                    if z=='edu2':
+                        print (y)
+        if x=='h1':
+            for y in hour_array:
+                for z in y:
+                    if z=='h2' or z=='h3':
+                        print (y)
+            
+
+filter(array_2, inp)
